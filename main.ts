@@ -1,13 +1,17 @@
-input.onButtonPressed(Button.A, function () {
-    iBIT.setMotor(ibitMotorCH.M1, ibitMotor.Forward, 50)
-    iBIT.setMotor(ibitMotorCH.M2, ibitMotor.Forward, 50)
-    if (iBIT.ReadADC(ibitReadADC.ADC0) < 20) {
-        iBIT.MotorStop()
-    }
-})
-input.onButtonPressed(Button.B, function () {
-    iBIT.MotorStop()
-})
 basic.forever(function () {
-    serial.writeValue("sonar", iBIT.ReadADC(ibitReadADC.ADC0))
+    if (input.buttonIsPressed(Button.A) == true) {
+        while (true) {
+            if (iBIT.ReadADC(ibitReadADC.ADC0) <= 1280) {
+                iBIT.MotorStop()
+            } else {
+                serial.writeValue("sonar", iBIT.ReadADC(ibitReadADC.ADC0))
+                iBIT.setMotor(ibitMotorCH.M2, ibitMotor.Forward, 50)
+                iBIT.setMotor(ibitMotorCH.M1, ibitMotor.Forward, 50)
+            }
+        }
+    } else {
+        if (input.buttonIsPressed(Button.B) == true) {
+            iBIT.MotorStop()
+        }
+    }
 })
